@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script src="https://drugst.one/cdn/nightly/dock1/drugsTone.js"></script>
+    <link rel="stylesheet" href="https://drugst.one/cdn/nightly/dock1/styles.css">
+</head>
+<body>
+<div id="app" style="display: flex">
+    <div style="border: black solid 1px; margin: 15px; width: 29vw;">
+        <div style="margin:15px">
+            <h2>Functions</h2>
+            <div>
+                <input id="nodeInput">
+                <button onclick="addNode()">Add node</button>
+            </div>
+            <div>
+                <h3>TaskID list</h3>
+                <button onclick="loadTask()" style="margin: 5px">Clear TaskId</button>
+                <div id="button-container" style="padding: 5px">
+                </div>
+            </div>
+            <div>
+                <h3>Panel color</h3>
+                <input id="color-input" type="color" onchange="setColor()" value="#ffffff">
+            </div>
+        </div>
+    </div>
+    <div id="drugstoneContainer" style="width: 70vw; min-width: 700px;">
+        <network-expander id='drugstone-component-id' network='{"nodes":[{"id":"PTEN"}]}' config='{}' ></network-expander>
+    </div>
+</div>
+
+<script>
+    document.getElementById("drugstone-component-id").addEventListener("taskEvent",(event)=>{saveTaskId(event)})
+
+    function addNode() {
+        let inputField = document.getElementById("nodeInput")
+        let nodeId = inputField.value
+        if (nodeId != null && nodeId.length > 0) {
+            let network = JSON.parse(document.getElementById("drugstone-component-id").getAttribute('network'))
+            network.nodes.push({id:nodeId})
+            document.getElementById("drugstone-component-id").setAttribute("network",JSON.stringify(network))
+        }
+        inputField.value = ""
+    }
+
+    function loadTask(taskId){
+        if(taskId ==null) {
+            document.getElementById("drugstone-component-id").removeAttribute("task-id")
+            return;
+        }
+        document.getElementById("drugstone-component-id").setAttribute("task-id",taskId)
+    }
+
+    function saveTaskId(event){
+        let id = event.detail.taskId
+        let container = document.getElementById("button-container")
+        let btn = document.createElement("button")
+        btn.innerHTML = "Load "+id;
+        btn.onclick= function(){
+            loadTask(id)
+        }
+        container.appendChild(btn)
+    }
+
+    function setColor() {
+        let color = document.getElementById("color-input").value
+        document.getElementById("drugstone-component-id").style.setProperty('--drgstn-panel',color);
+    }
+
+</script>
+</body>
