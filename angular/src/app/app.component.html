@@ -1,0 +1,29 @@
+<div id="app" style="display: flex">
+  <div style="border: black solid 1px; margin: 15px; width: 29vw;">
+    <div style="margin:15px">
+      <h2>Functions</h2>
+      <div>
+        <input #nodeInput>
+        <button (click)="addNode(nodeInput.value)">Add node</button>
+      </div>
+      <div>
+        <h3>TaskID list</h3>
+        <button (click)="loadTask(undefined)" style="margin: 5px">Clear TaskId</button>
+        <div *ngFor="let taskId of taskIds" style="padding: 5px">
+          <button (click)="loadTask(taskId)">Load {{ taskId }}</button>
+        </div>
+      </div>
+      <div>
+        <h3>Panel color</h3>
+        <input type="color" (change)="setColor($event)" value="#ffffff">
+      </div>
+    </div>
+  </div>
+  <div style="width: 70vw; min-width: 700px;">
+    <network-expander #drugstoneComponent id='drugstone-plugin-id' [taskId]="taskId" [network]='getNetwork()'
+                      [config]='getConfig()'
+                      (taskEvent)="saveTaskId($event)"></network-expander>
+  </div>
+</div>
+
+
