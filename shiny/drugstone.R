@@ -10,6 +10,13 @@ library(jsonlite)
 config <- '{}'
 network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
 
+nodeInput = textInput("node", "enter node", value="")
+
+getNetwork <- function(){
+  toJSON(network)
+}
+
+
 ui <- fluidPage(
 
       
@@ -21,25 +28,26 @@ ui <- fluidPage(
     <div style="border: black solid 1px; margin: 15px; width: 29vw;">
       <div style="margin:15px">
             <h2>Functions</h2>
-             <div>
-                <input id="nodeInput">
-                <button id="addNode">Add node</button>
-            </div>
+             <div><button id="addNodes" class="shiny-bound-input action-button">Add Node</button>'),nodeInput,
+    HTML('</div>
         </div>
     </div>
     <div style="width: 70vw; min-width: 700px;">
           <network-expander
                    id="example-drugst.one"
                    config=',config,'
-                   network=',toJSON(network),'>
+                   network='),getNetwork(),HTML('>
           </network-expander>
          </div></div>')
 )
 
 
 ## Define server logic
-server <- function(input, output) {
-
+server <- function(input, output,session) {
+    observeEvent(input$addNode, {
+#        network$nodes <- rbind(network$nodes, input$node)
+#        input$node = ""
+      })
 }
 
 ## Start app
