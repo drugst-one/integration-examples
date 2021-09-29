@@ -5,41 +5,49 @@
 ######################################################
 
 library(shiny)
-library(jsonlite)
+library(shinyjs)
 
 config <- '{}'
-network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
-
-nodeInput = textInput("node", "enter node", value="")
 
 ## Define server logic
 server <- function(input, output,session) {
-  observeEvent(input$addNode, {
-    #        network$nodes <- rbind(network$nodes, input$node)
+
+  network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
+  networkString <- toJSON(network) 
+  
+  observeEvent(input$add, {
+    #session$sendCustomMessage(type='testmessage', message='clicked')
+    network$nodes <<- rbind(network$nodes, input$node)
+    networkString <<- toJSON(network)
+    cat(stderr(), networkString)
+    #        
     #        input$node = ""
   })
   
   output$drugstone <- renderUI({
+    input$add
+     # delay(100)
     HTML(paste('<network-expander
                    id="example-drugst.one"
                    config=',config,'
-                   network='), toJSON(network), HTML('>
+                   network='), networkString, HTML('>
                      </network-expander>'))
-  })
+    }
+  
+  )
+  
 }
 
 ui <- fluidPage(
-
-      
+  
       tags$head(HTML('<script src="https://drugst.one/cdn/nightly/dock1/drugsTone.js"></script>')),
       tags$head(HTML('<link rel="stylesheet" href="https://drugst.one/cdn/nightly/dock1/styles.css">')),
-
     
     HTML('<div style="display: flex">
     <div style="border: black solid 1px; margin: 15px; width: 29vw;">
       <div style="margin:15px">
             <h2>Functions</h2>
-             <div><button id="addNodes" class="shiny-bound-input action-button">Add Node</button>'),nodeInput,
+             '),actionButton("add", "add Node"),textInput("node", "enter node", value=""),
     HTML('</div>
         </div>
     </div>
