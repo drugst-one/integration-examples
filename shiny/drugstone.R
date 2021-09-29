@@ -12,10 +12,21 @@ network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
 
 nodeInput = textInput("node", "enter node", value="")
 
-getNetwork <- function(){
-  toJSON(network)
+## Define server logic
+server <- function(input, output,session) {
+  observeEvent(input$addNode, {
+    #        network$nodes <- rbind(network$nodes, input$node)
+    #        input$node = ""
+  })
+  
+  output$drugstone <- renderUI({
+    HTML(paste('<network-expander
+                   id="example-drugst.one"
+                   config=',config,'
+                   network='), toJSON(network), HTML('>
+                     </network-expander>'))
+  })
 }
-
 
 ui <- fluidPage(
 
@@ -32,23 +43,12 @@ ui <- fluidPage(
     HTML('</div>
         </div>
     </div>
-    <div style="width: 70vw; min-width: 700px;">
-          <network-expander
-                   id="example-drugst.one"
-                   config=',config,'
-                   network='),getNetwork(),HTML('>
-          </network-expander>
-         </div></div>')
+    <div style="width: 70vw; min-width: 700px;">'),htmlOutput("drugstone"),
+    HTML('</div></div>')
 )
 
 
-## Define server logic
-server <- function(input, output,session) {
-    observeEvent(input$addNode, {
-#        network$nodes <- rbind(network$nodes, input$node)
-#        input$node = ""
-      })
-}
+
 
 ## Start app
 shinyApp(ui = ui, server = server)
