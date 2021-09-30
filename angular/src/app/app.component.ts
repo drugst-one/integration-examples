@@ -53,7 +53,7 @@ export class AppComponent {
     this.taskId = id;
   }
 
- // Set color of panel based on colorpicker decision
+ // Set color of panel based on color-picker decision
   setColor(event:object) {
     // @ts-ignore
     // Set global css variable for panel color
