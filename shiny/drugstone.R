@@ -1,7 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(jsonlite)
-library(colourpicker)
+#library(colourpicker)
 
 ## Define server logic
 server <- function(input, output,session) {
