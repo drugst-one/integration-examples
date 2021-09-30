@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <script src="https://drugst.one/cdn/nightly/dock1/drugsTone.js"></script>
-    <link rel="stylesheet" href="https://drugst.one/cdn/nightly/dock1/styles.css">
+    <!-- Loading drugstone.plugin -->
+    <script src="https://drugst.one/cdn/latest/drugsTone.js"></script>
+    <link rel="stylesheet" href="https://drugst.one/cdn/latest/styles.css">
 </head>
 <body>
 <div id="app" style="display: flex">
     <div style="border: black solid 1px; margin: 15px; width: 29vw;">
         <div style="margin:15px">
+            <!-- Function Panel -->
             <h2>Functions</h2>
             <div>
                 <input id="nodeInput">
@@ -26,48 +28,72 @@
             </div>
         </div>
     </div>
-    <div id="drugstoneContainer" ">
+    <div id="drugstoneContainer">
+        <!-- Integrating the drugst.one plugin with initial configuration -->
         <network-expander id='drugstone-component-id' network='{"nodes":[{"id":"PTEN"}]}' config='{}' ></network-expander>
     </div>
 </div>
+<!-- Set initial style -->
+<style>
+    :root{
+        --drgstn-panel: #bfbfbf
+    }
+</style>
 
 <script>
+    // Adding EventListener for the analysis start event
     document.getElementById("drugstone-component-id").addEventListener("taskEvent",(event)=>{saveTaskId(event)})
 
+    // Function for adding new node from input field
     function addNode() {
         let inputField = document.getElementById("nodeInput")
         let nodeId = inputField.value
         if (nodeId != null && nodeId.length > 0) {
-            let network = JSON.parse(document.getElementById("drugstone-component-id").getAttribute('network'))
+            // Get drugt.one DOM Element
+            let drugstonElement = document.getElementById("drugstone-component-id")
+            // Get current network from drugst.one plugin
+            let network = JSON.parse(drugstonElement.getAttribute('network'))
+            // Add new node to current network
             network.nodes.push({id:nodeId})
-            document.getElementById("drugstone-component-id").setAttribute("network",JSON.stringify(network))
+            // Injecting updated network into drugst.one plugin
+            drugstonElement.setAttribute("network",JSON.stringify(network))
         }
         inputField.value = ""
     }
 
+    // Loading task based on taskId
     function loadTask(taskId){
+        // Get drugt.one DOM Element
+        let drugstonElement = document.getElementById("drugstone-component-id")
         if(taskId ==null) {
-            document.getElementById("drugstone-component-id").removeAttribute("task-id")
+            // Resetting task-id for clear button
+            drugstonElement.removeAttribute("task-id")
             return;
         }
-        document.getElementById("drugstone-component-id").setAttribute("task-id",taskId)
+        // Set taskId to trigger analysis result loading
+        drugstonElement.setAttribute("task-id",taskId)
     }
 
+    // Accepting analysis task event from EventListener
     function saveTaskId(event){
+        // Extracting only taskId from event detail object
         let id = event.detail.taskId
         let container = document.getElementById("button-container")
         let btn = document.createElement("button")
         btn.innerHTML = "Load "+id;
+        // Adding callback function to task loading button
         btn.onclick= function(){
             loadTask(id)
         }
+        // Add button to button container
         container.appendChild(btn)
     }
 
+    // Set panel color from colorpicker
     function setColor() {
         let color = document.getElementById("color-input").value
+        // Setting panel color css variable globally
         document.getElementById("drugstone-component-id").style.setProperty('--drgstn-panel',color);
     }
-
 </script>
 </body>
