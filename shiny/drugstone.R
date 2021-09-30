@@ -1,9 +1,3 @@
-######################################################
-## minimal working example - direct integration 
-##
-## 2021-08-10, MW
-######################################################
-
 library(shiny)
 library(shinyjs)
 library(jsonlite)
@@ -14,67 +8,87 @@ server <- function(input, output,session) {
 
   network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
   config <- fromJSON('{}')
+  
+  ## Network and Config have to be in JSON format when handed to drugst.one
   networkString <- toJSON(network)
   configString <- toJSON(config)
-  lastTaskId <- ""
+  
+  ## TaskID variable to load/unload analysis results
   taskId <- ""
   
+  ## Eventlistener initialization after website rendering using JavaScript
   session$onFlushed(function(){
+    ## Calling init function (www/set-color.js). Also already contains code to 
+    ## render buttons and on-click actions for each incoming task-id.
     session$sendCustomMessage(type = 'init-eventhandler', message="")
   })
   
+  ## Eventlistener for adding nodes to the network
   observeEvent(input$add, {
+    ## Adding new node to the network object
     network$nodes <<- rbind(network$nodes, input$node)
+    ## Update network JSON object
     networkString <<- toJSON(network)
   })
   
-  observeEvent(input$newTask,{
-    lastTaskId <<- input$newTask
-    insertUI(selector="#taskButtons",where="beforeEnd",actionButton("openTask", paste("Load last task")))
-  })
-  
+  ## Eventlistener for clearing the taskId
   observeEvent(input$clearTask,{
     taskId <<-""    
   })
   
-  observeEvent(input$openTask,ignoreInit = TRUE,  {
-    taskId <<-lastTaskId
-  })
-  
+  ## Eventlistener for panel colorpicker
   observeEvent(input$color, {
+    ## Using js to globally set color '--drgstn-panel' (www/set-color.js)
     session$sendCustomMessage(type = 'panelcolor', message=input$color)
   })
   
+  ## Reactive creation of the drugst.one plugin html configuration
   output$drugstone <- renderUI({
+    ## Triggers for reactive rerendering
     input$add
-    input$openTask
-    drugstoneComp <- paste('<network-expander
+    input$clearTask
+    ## Creation of the <network-expander> tags, including the id the DOM element
+    ## can be called by, the variable taskId to change the shown analysis
+    ## result, the configuration and the network JSON strings.
+    HTML(paste('<network-expander
                    id="drugstone-component-id"',
-                           'task-id="',taskId,'"
+               'task-id="',taskId,'"
                    config=',configString,'
-                   network=', networkString,'></network-expander>',sep="")
-    HTML(drugstoneComp)
+                   network=', networkString,'></network-expander>',sep=""))
     }
   )
 }
 
+## Webpage composition
 ui <- fluidPage(
-      tags$head(tags$script(src = "message-handler.js")),
-      tags$head(tags$script(src = "set-color.js")),
-      tags$head(tags$script(src = "task-listener.js")),
-      tags$head(HTML('<script src="https://drugst.one/cdn/nightly/dock1/drugsTone.js"></script>')),
-      tags$head(HTML('<link rel="stylesheet" href="https://drugst.one/cdn/nightly/dock1/styles.css">')),
-      tags$head(tags$style(":root {--drgstn-panel:#ccccff;}")),
+    ## Loading of js code used for eventlistening, button creation and color
+    ## setting
+    tags$head(tags$script(src = "set-color.js")),
+    tags$head(tags$script(src = "task-listener.js")),
+    
+    ## Loading drugst.one plugin files
+    tags$head(HTML('<script src="https://drugst.one/cdn/latest/drugsTone.js"></script>')),
+    tags$head(HTML('<link rel="stylesheet" href="https://drugst.one/cdn/latest/styles.css">')),
+    
+    ## Initial setting of a drugst.one color css variable
+    tags$head(tags$style(":root {--drgstn-panel:#ccccff;}")),
+  
+    ## Function panel
     HTML('<div style="display: flex">
     <div style="border: black solid 1px; margin: 15px; width: 29vw;">
       <div style="margin:15px">
             <h2>Functions</h2>
-             '),actionButton("add", "add Node"),textInput("node", "enter node", value=""),
-    colourInput("color","Select panel Background color",value="#ccccff"), actionButton("clearTask", "clear TaskID"),HTML('<div id="taskButtons"></div>'),
-    HTML('</div>
+             '),
+    actionButton("add", "add Node"),
+    textInput("node", "enter node", value=""),
+    colourInput("color","Select panel Background color",value="#ccccff"), 
+    actionButton("clearTask", "clear TaskID"),HTML('<div id="button-container"></div></div>
         </div>
     </div>
-    <div style="width: 70vw; min-width: 700px;">'),uiOutput("drugstone"),
+    <div style="width: 70vw; min-width: 700px;">'),
+  
+    ## Adding the reactive drugst.one UI-Component
+    uiOutput("drugstone"),
     HTML('</div></div>')
 )
 
