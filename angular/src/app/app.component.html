@@ -1,6 +1,7 @@
 <div id="app" style="display: flex">
   <div style="border: black solid 1px; margin: 15px; width: 29vw;">
     <div style="margin:15px">
+      <!-- Function panel -->
       <h2>Functions</h2>
       <div>
         <input #nodeInput>
@@ -15,11 +16,12 @@
       </div>
       <div>
         <h3>Panel color</h3>
-        <input type="color" (change)="setColor($event)" value="#ffffff">
+        <input type="color" (change)="setColor($event)" value="#bfbfbf">
       </div>
     </div>
   </div>
   <div style="width: 70vw; min-width: 700px;">
+    <!-- Loading the drugst.one component with reactive attribute definition, component reference and eventListener for taskEvent-->
     <network-expander #drugstoneComponent id='drugstone-plugin-id' [taskId]="taskId" [network]='getNetwork()'
                       [config]='getConfig()'
                       (taskEvent)="saveTaskId($event)"></network-expander>
