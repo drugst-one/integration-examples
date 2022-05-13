@@ -23,9 +23,9 @@
     </div>
     <div ref="drugstoneContainer" style="width: 70vw; min-width: 700px;">
       <!-- Loading drugst.one component with reactive attribute assignment of taskId, network, config, and style and task EventListener -->
-      <network-expander id='drugstone-plugin-id' :task-id="taskId" :network='getNetwork()' :config='getConfig()'
+      <drugst-one id='drugstone-plugin-id' :task-id="taskId" :network='getNetwork()' :config='getConfig()'
                         :style="drugstoneStyle"
-                        @taskEvent="saveTaskId"></network-expander>
+                        @taskEvent="saveTaskId"></drugst-one>
     </div>
   </div>
 </template>

@@ -46,14 +46,14 @@ server <- function(input, output,session) {
     ## Triggers for reactive rerendering
     input$add
     input$clearTask
-    ## Creation of the <network-expander> tags, including the id the DOM element
+    ## Creation of the <drugst-one> tags, including the id the DOM element
     ## can be called by, the variable taskId to change the shown analysis
     ## result, the configuration and the network JSON strings.
-    HTML(paste('<network-expander
+    HTML(paste('<drugst-one
                    id="drugstone-component-id"',
                'task-id="',taskId,'"
                    config=',configString,'
-                   network=', networkString,'></network-expander>',sep=""))
+                   network=', networkString,'></drugst-one>',sep=""))
     }
   )
 }
@@ -66,8 +66,8 @@ ui <- fluidPage(
     tags$head(tags$script(src = "task-listener.js")),
     
     ## Loading drugst.one plugin files
-    tags$head(HTML('<script src="https://drugst.one/cdn/latest/drugsTone.js"></script>')),
-    tags$head(HTML('<link rel="stylesheet" href="https://drugst.one/cdn/latest/styles.css">')),
+    tags$head(HTML('<script src="https://cdn.drugst.one/latest/drugstone.js"></script>')),
+    tags$head(HTML('<link rel="stylesheet" href="https://cdn.drugst.one/latest/styles.css">')),
     
     ## Initial setting of a drugst.one color css variable
     tags$head(tags$style(":root {--drgstn-panel:#ccccff;}")),

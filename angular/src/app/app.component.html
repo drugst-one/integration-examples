@@ -22,9 +22,9 @@
   </div>
   <div style="width: 70vw; min-width: 700px;">
     <!-- Loading the drugst.one component with reactive attribute definition, component reference and eventListener for taskEvent-->
-    <network-expander #drugstoneComponent id='drugstone-plugin-id' [taskId]="taskId" [network]='getNetwork()'
+    <drugst-one #drugstoneComponent id='drugstone-plugin-id' [taskId]="taskId" [network]='getNetwork()'
                       [config]='getConfig()'
-                      (taskEvent)="saveTaskId($event)"></network-expander>
+                      (taskEvent)="saveTaskId($event)"></drugst-one>
   </div>
 </div>
 
