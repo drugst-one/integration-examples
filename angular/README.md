@@ -1,6 +1,9 @@
 # Angular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.7.
+## Install dependencies
+
+Run 'npm install' to install all node dependencies.
 
 ## Development server
 

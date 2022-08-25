@@ -24,6 +24,7 @@
     <!-- Loading the drugst.one component with reactive attribute definition, component reference and eventListener for taskEvent-->
     <drugst-one #drugstoneComponent id='drugstone-plugin-id' [taskId]="taskId" [network]='getNetwork()'
                       [config]='getConfig()'
+                      [groups]='getGroups()'
                       (taskEvent)="saveTaskId($event)"></drugst-one>
   </div>
 </div>

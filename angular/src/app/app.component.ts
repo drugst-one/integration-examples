@@ -16,6 +16,8 @@ export class AppComponent {
   network = {nodes: [{id: "pten"}, {id: "tp53"}]};
   // Initial configuration object
   config = {nodeShadow: "true", edgeShadow: "false", autofillEdges: "false"};
+  // Styling of network groups
+  groups = {'nodeGroups':{}}
   // List of received taskIds
   taskIds = [];
   // currently loaded taskId
@@ -39,6 +41,12 @@ export class AppComponent {
   getConfig() {
     return JSON.stringify(this.config)
   }
+
+  // Groups to string method for drugst.one, because raw object cannot be handed over to the plugin
+  getGroups() {
+    return JSON.stringify(this.groups)
+  }
+
 
   // Callback of task EventListener on the drugst.one component
   saveTaskId(event:object) {
