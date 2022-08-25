@@ -23,7 +23,7 @@
     </div>
     <div ref="drugstoneContainer" style="width: 70vw; min-width: 700px;">
       <!-- Loading drugst.one component with reactive attribute assignment of taskId, network, config, and style and task EventListener -->
-      <drugst-one id='drugstone-plugin-id' :task-id="taskId" :network='getNetwork()' :config='getConfig()'
+      <drugst-one id='drugstone-plugin-id' :task-id="taskId" :network='getNetwork()' :config='getConfig()' :groups='getGroups()'
                         :style="drugstoneStyle"
                         @taskEvent="saveTaskId"></drugst-one>
     </div>
@@ -41,6 +41,8 @@ export default {
       network: {nodes: [{id: "pten"}, {id: "tp53"}]},
       // Initial configuration object
       config: {nodeShadow: "true", edgeShadow: "false", autofillEdges: "false"},
+      // Network groups object
+      groups: {nodeGroups: []},
       // List of received taskIds by the taskEvent EventHandler
       taskIds: [],
       // Current taskId
@@ -64,6 +66,11 @@ export default {
     // Network to string method for drugst.one, because raw object cannot be handed over to the plugin
     getNetwork: function () {
       return JSON.stringify(this.network)
+    },
+
+    // Groups to string method for drugst.one, because raw object cannot be handed over to the plugin
+    getGroups: function () {
+      return JSON.stringify(this.groups)
     },
 
     // Configuration to string method for drugst.one, because raw object cannot be handed over to the plugin
