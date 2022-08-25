@@ -7,10 +7,12 @@ server <- function(input, output,session) {
 
   network <- fromJSON('{"nodes":[{"id":"PTEN"},{"id":"TP53"}]}')
   config <- fromJSON('{}')
+  groups  <- fromJSON('{"nodeGroups":[]}')
   
   ## Network and Config have to be in JSON format when handed to drugst.one
   networkString <- toJSON(network)
   configString <- toJSON(config)
+  groupsString <- toJSON(groups)
   
   ## TaskID variable to load/unload analysis results
   taskId <- ""
@@ -53,6 +55,7 @@ server <- function(input, output,session) {
                    id="drugstone-component-id"',
                'task-id="',taskId,'"
                    config=',configString,'
+                   groups=',groupsString,'
                    network=', networkString,'></drugst-one>',sep=""))
     }
   )
