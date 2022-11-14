@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(jsonlite)
+library(colourpicker)
 
 ## Define server logic
 server <- function(input, output,session) {
@@ -73,7 +74,7 @@ ui <- fluidPage(
     tags$head(HTML('<link rel="stylesheet" href="https://cdn.drugst.one/latest/styles.css">')),
     
     ## Initial setting of a drugst.one color css variable
-    tags$head(tags$style(":root {--drgstn-panel:#ccccff;}")),
+    tags$head(tags$style(":root {--drgstn-panel:#ccccff;--drgstn-height:400px;}")),
   
     ## Function panel
     HTML('<div style="display: flex">
