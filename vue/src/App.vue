@@ -104,5 +104,9 @@ export default {
 </script>
 
 <style>
-
+:root{
+  --drgstn-height: 400px;
+  --drgstn-text-secondary: #ffffff;
+  --drgstn-primary: #9b63ff;
+}
 </style>

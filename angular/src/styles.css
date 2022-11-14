@@ -1,3 +1,5 @@
 :root{
-  --drgstn-panel: #bfbfbf
+  --drgstn-panel: #bfbfbf;
+  --drgstn-text-secondary: #ffffff;
+  --drgstn-primary: #9b63ff;
 }
